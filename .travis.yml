@@ -1,0 +1,12 @@
+language: scala
+jdk:
+  - openjdk8
+  - openjdk11
+scala:
+   - 2.11.12
+   - 2.12.11
+   - 2.13.2
+script:
+  - sbt ++$TRAVIS_SCALA_VERSION coverage test coverageReport
+after_success:
+  - bash <(curl -s https://codecov.io/bash)

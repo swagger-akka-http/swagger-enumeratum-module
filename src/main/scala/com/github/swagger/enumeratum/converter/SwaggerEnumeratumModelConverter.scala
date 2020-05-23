@@ -2,7 +2,7 @@ package com.github.swagger.enumeratum.converter
 
 import java.util.Iterator
 
-import com.fasterxml.jackson.module.scala.DefaultScalaModule
+import com.github.swagger.scala.converter.AnnotatedTypeForOption
 import enumeratum.EnumEntry
 import io.swagger.v3.core.converter._
 import io.swagger.v3.core.jackson.ModelResolver
@@ -13,13 +13,7 @@ import io.swagger.v3.oas.models.media.Schema
 
 import scala.util.Try
 
-object SwaggerEnumeratumModelConverter {
-  Json.mapper().registerModule(new DefaultScalaModule())
-}
-
 class SwaggerEnumeratumModelConverter extends ModelResolver(Json.mapper()) {
-  SwaggerEnumeratumModelConverter
-
   private val enumEntryClass = classOf[EnumEntry]
 
   override def resolve(annotatedType: AnnotatedType, context: ModelConverterContext, chain: Iterator[ModelConverter]): Schema[_] = {
@@ -62,21 +56,27 @@ class SwaggerEnumeratumModelConverter extends ModelResolver(Json.mapper()) {
     result.getOrElse(Seq.empty)
   }
 
-  private def setRequired(annotatedType: AnnotatedType): Unit = {
-    val required = getRequiredSettings(annotatedType).headOption.getOrElse(true)
-    if (required) {
-      Option(annotatedType.getParent).foreach { parent =>
-        Option(annotatedType.getPropertyName).foreach { n =>
-          addRequiredItem(parent, n)
+  private def setRequired(annotatedType: AnnotatedType): Unit = annotatedType match {
+    case _: AnnotatedTypeForOption => // not required
+    case _ => {
+      val required = getRequiredSettings(annotatedType).headOption.getOrElse(true)
+      if (required) {
+        Option(annotatedType.getParent).foreach { parent =>
+          Option(annotatedType.getPropertyName).foreach { n =>
+            addRequiredItem(parent, n)
+          }
         }
       }
     }
   }
 
-  private def getRequiredSettings(annotatedType: AnnotatedType): Seq[Boolean] = {
-    nullSafeList(annotatedType.getCtxAnnotations).collect {
-      case p: Parameter => p.required()
-      case s: SchemaAnnotation => s.required()
+  private def getRequiredSettings(annotatedType: AnnotatedType): Seq[Boolean] = annotatedType match {
+    case _: AnnotatedTypeForOption => Seq.empty
+    case _ => {
+      nullSafeList(annotatedType.getCtxAnnotations).collect {
+        case p: Parameter => p.required()
+        case s: SchemaAnnotation => s.required()
+      }
     }
   }
 

@@ -2,7 +2,7 @@ package com.github.swagger.enumeratum.converter
 
 import io.swagger.v3.core.converter._
 import io.swagger.v3.oas.models.media._
-import models.{ModelWEnum, OrderSize}
+import models.{ModelWEnum, ModelWOptionalEnum, OrderSize}
 import org.scalatest.OptionValues
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -20,6 +20,17 @@ class ModelPropertyParserTest extends AnyFlatSpec with Matchers with OptionValue
     field shouldBe a [StringSchema]
     field.asInstanceOf[StringSchema].getEnum.asScala shouldEqual OrderSize.values.map(_.entryName)
     nullSafeList(model.value.getRequired) shouldBe Seq("field")
+  }
+  it should "process Model with Optional Enumeratum Enum" in {
+    val converter = ModelConverters.getInstance()
+    val schemas = converter.readAll(classOf[ModelWOptionalEnum]).asScala.toMap
+    val model = findModel(schemas, "ModelWOptionalEnum")
+    model should be (defined)
+    model.get.getProperties should not be (null)
+    val field = model.value.getProperties.get("field")
+    field shouldBe a [StringSchema]
+    field.asInstanceOf[StringSchema].getEnum.asScala shouldEqual OrderSize.values.map(_.entryName)
+    nullSafeList(model.value.getRequired) shouldBe empty
   }
 
   def findModel(schemas: Map[String, Schema[_]], name: String): Option[Schema[_]] = {

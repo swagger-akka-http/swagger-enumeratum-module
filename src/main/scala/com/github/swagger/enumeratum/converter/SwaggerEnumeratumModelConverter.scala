@@ -47,6 +47,7 @@ class SwaggerEnumeratumModelConverter extends ModelResolver(Json.mapper()) {
             }
           }
         }
+        case _ =>
       }
       sp
     } else if (chain.hasNext) {

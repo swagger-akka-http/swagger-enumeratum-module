@@ -41,7 +41,7 @@ class ModelPropertyParserTest extends AnyFlatSpec with Matchers with OptionValue
     val field = model.value.getProperties.get("field")
     field shouldBe a [StringSchema]
     val schema = field.asInstanceOf[StringSchema]
-    //schema.getDescription shouldEqual "enum value"
+    schema.getDescription shouldEqual "enum value"
     schema.getEnum.asScala shouldEqual OrderSize.values.map(_.entryName)
     nullSafeList(model.value.getRequired) shouldBe Seq.empty
   }

@@ -8,6 +8,7 @@ import io.swagger.v3.core.converter._
 import io.swagger.v3.core.jackson.ModelResolver
 import io.swagger.v3.core.util.{Json, PrimitiveType}
 import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.media.Schema.AccessMode
 import io.swagger.v3.oas.annotations.media.{Schema => SchemaAnnotation}
 import io.swagger.v3.oas.models.media.Schema
 
@@ -25,8 +26,30 @@ class SwaggerEnumeratumModelConverter extends ModelResolver(Json.mapper()) {
       getValues(cls).foreach { v =>
         sp.addEnumItemObject(v)
       }
+      nullSafeList(annotatedType.getCtxAnnotations).foreach {
+        case p: Parameter => {
+          Option(p.description).foreach(desc => sp.setDescription(desc))
+          sp.setDeprecated(p.deprecated)
+          Option(p.example).foreach(ex => sp.setExample(ex))
+          Option(p.name).foreach(name => sp.setName(name))
+        }
+        case s: SchemaAnnotation => {
+          Option(s.description).foreach(desc => sp.setDescription(desc))
+          Option(s.defaultValue).foreach(df => sp.setDefault(df))
+          sp.setDeprecated(s.deprecated)
+          Option(s.example).foreach(ex => sp.setExample(ex))
+          Option(s.name).foreach(name => sp.setName(name))
+          Option(s.accessMode).foreach { accessMode =>
+            accessMode match {
+              case AccessMode.READ_ONLY => sp.setReadOnly(true)
+              case AccessMode.WRITE_ONLY => sp.setWriteOnly(true)
+              case _ =>
+            }
+          }
+        }
+      }
       sp
-    }else if (chain.hasNext) {
+    } else if (chain.hasNext) {
       val nextResolved = Option(chain.next().resolve(annotatedType, context, chain))
       nextResolved match {
         case Some(property) => {

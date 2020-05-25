@@ -18,7 +18,7 @@ jobs:
       with:
         java-version: 1.8
     - name: Run tests
-    - run: |
+      run: |
         sbt ++2.11.12 coverage test coverageReport
         sbt ++2.12.11 coverage test coverageReport
         sbt coverage test coverageReport

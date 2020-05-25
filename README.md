@@ -1,3 +1,5 @@
+![Scala CI](https://github.com/swagger-akka-http/swagger-enumeratum-module/workflows/Scala%20CI/badge.svg)
+
 # swagger-enumeratum-module
 Enumeratum support for swagger.
 

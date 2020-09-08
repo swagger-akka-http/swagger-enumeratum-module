@@ -24,10 +24,10 @@ Global / useGpg := false
 
 libraryDependencies ++= Seq(
   "io.swagger.core.v3" % "swagger-core" % "2.1.4",
-  "com.github.swagger-akka-http" %% "swagger-scala-module" % "2.1.2",
+  "com.github.swagger-akka-http" %% "swagger-scala-module" % "2.1.3",
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.11.1",
   "com.beachape" %% "enumeratum" % "1.6.1",
-  "org.scalatest" %% "scalatest" % "3..02" % Test,
+  "org.scalatest" %% "scalatest" % "3.2.2" % Test,
   "org.slf4j" % "slf4j-simple" % "1.7.30" % Test
 )
 

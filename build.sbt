@@ -6,7 +6,7 @@ import Defaults._
 
 organization := "com.github.swagger-akka-http"
 
-scalaVersion := "2.13.3"
+scalaVersion := "2.13.4"
 
 crossScalaVersions := Seq("2.11.12", "2.12.12", scalaVersion.value)
 
@@ -25,9 +25,9 @@ Global / useGpg := false
 libraryDependencies ++= Seq(
   "io.swagger.core.v3" % "swagger-core" % "2.1.4",
   "com.github.swagger-akka-http" %% "swagger-scala-module" % "2.1.3",
-  "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.11.1",
+  "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.11.3",
   "com.beachape" %% "enumeratum" % "1.6.1",
-  "org.scalatest" %% "scalatest" % "3.2.2" % Test,
+  "org.scalatest" %% "scalatest" % "3.2.3" % Test,
   "org.slf4j" % "slf4j-simple" % "1.7.30" % Test
 )
 

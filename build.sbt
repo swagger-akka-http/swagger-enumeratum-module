@@ -23,7 +23,7 @@ pomIncludeRepository := { x => false }
 Global / useGpg := false
 
 libraryDependencies ++= Seq(
-  "io.swagger.core.v3" % "swagger-core" % "2.1.5",
+  "io.swagger.core.v3" % "swagger-core" % "2.1.6",
   "com.github.swagger-akka-http" %% "swagger-scala-module" % "2.2.0",
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.12.0",
   "com.beachape" %% "enumeratum" % "1.6.1",

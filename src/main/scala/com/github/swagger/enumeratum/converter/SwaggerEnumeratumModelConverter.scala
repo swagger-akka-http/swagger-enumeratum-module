@@ -1,9 +1,8 @@
 package com.github.swagger.enumeratum.converter
 
 import java.util.Iterator
-
 import com.github.swagger.scala.converter.AnnotatedTypeForOption
-import enumeratum.EnumEntry
+import enumeratum.{Enum, EnumEntry}
 import io.swagger.v3.core.converter._
 import io.swagger.v3.core.jackson.ModelResolver
 import io.swagger.v3.core.util.{Json, PrimitiveType}
@@ -11,8 +10,6 @@ import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Schema.AccessMode
 import io.swagger.v3.oas.annotations.media.{Schema => SchemaAnnotation}
 import io.swagger.v3.oas.models.media.Schema
-
-import scala.util.Try
 
 class SwaggerEnumeratumModelConverter extends ModelResolver(Json.mapper()) {
   private val enumEntryClass = classOf[EnumEntry]
@@ -67,17 +64,8 @@ class SwaggerEnumeratumModelConverter extends ModelResolver(Json.mapper()) {
   private def isEnum(cls: Class[_]): Boolean = enumEntryClass.isAssignableFrom(cls)
 
   private def getValues(cls: Class[_]): Seq[String] = {
-    val objectClassOption = if(cls.getName.endsWith("$")) {
-      Some(cls)
-    } else {
-      Try(Class.forName(cls.getName)).toOption
-    }
-    val result = objectClassOption.flatMap { objectClass =>
-      Option(objectClass.getMethod("values")).map { method =>
-        method.invoke(None.orNull).asInstanceOf[Seq[EnumEntry]].map(_.entryName)
-      }
-    }
-    result.getOrElse(Seq.empty)
+    val enum = Class.forName(cls.getName + "$").getField("MODULE$").get(null).asInstanceOf[Enum[EnumEntry]]
+    enum.values.map(_.entryName)
   }
 
   private def setRequired(annotatedType: AnnotatedType): Unit = annotatedType match {

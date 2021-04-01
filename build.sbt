@@ -27,7 +27,7 @@ libraryDependencies ++= Seq(
   "com.github.swagger-akka-http" %% "swagger-scala-module" % "2.3.0",
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.12.2",
   "com.beachape" %% "enumeratum" % "1.6.1",
-  "org.scalatest" %% "scalatest" % "3.2.5" % Test,
+  "org.scalatest" %% "scalatest" % "3.2.7" % Test,
   "org.slf4j" % "slf4j-simple" % "1.7.30" % Test
 )
 

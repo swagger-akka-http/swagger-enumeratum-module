@@ -57,7 +57,7 @@ homepage := Some(new URL("https://github.com/swagger-akka-http/swagger-enumeratu
 
 parallelExecution in Test := false
 
-startYear := Some(2014)
+startYear := Some(2020)
 
 licenses := Seq(("Apache License 2.0", new URL("http://www.apache.org/licenses/LICENSE-2.0.html")))
 

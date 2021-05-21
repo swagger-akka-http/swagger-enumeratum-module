@@ -2,25 +2,22 @@
 import xml.Group
 import sbt._
 import Keys._
-import Defaults._
 
 organization := "com.github.swagger-akka-http"
 
-scalaVersion := "2.13.5"
+scalaVersion := "2.13.6"
 
-crossScalaVersions := Seq("2.11.12", "2.12.12", scalaVersion.value)
+crossScalaVersions := Seq("2.11.12", "2.12.13", scalaVersion.value)
 
-organizationHomepage in ThisBuild := Some(url("https://github.com/swagger-akka-http/swagger-enumeratum-module"))
+ThisBuild / organizationHomepage := Some(url("https://github.com/swagger-akka-http/swagger-enumeratum-module"))
 
-scalacOptions in ThisBuild ++= Seq("-encoding", "UTF-8", "-deprecation", "-unchecked")  
+ThisBuild / scalacOptions ++= Seq("-encoding", "UTF-8", "-deprecation", "-unchecked")
 
-publishMavenStyle in ThisBuild := true
+publishMavenStyle := true
 
-publishArtifact in Test := false
+Test / publishArtifact in Test := false
 
 pomIncludeRepository := { x => false }
-
-Global / useGpg := false
 
 libraryDependencies ++= Seq(
   "io.swagger.core.v3" % "swagger-core" % "2.1.9",
@@ -38,24 +35,18 @@ publishTo := {
     Some("Sonatype Nexus Releases" at "https://oss.sonatype.org/service/local/staging/deploy/maven2")
 }
 
-credentials in ThisBuild += Credentials (Path.userHome / ".ivy2" / ".credentials")
+ThisBuild / credentials += Credentials (Path.userHome / ".ivy2" / ".credentials")
 
-resolvers in ThisBuild ++= Seq(
+ThisBuild / resolvers ++= Seq(
   Resolver.mavenLocal,
   Resolver.sonatypeRepo("snapshots")
 )
-
-publishMavenStyle := true
-
-publishArtifact in Test := false
-
-pomIncludeRepository := { x => false }
 
 credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")
 
 homepage := Some(new URL("https://github.com/swagger-akka-http/swagger-enumeratum-module"))
 
-parallelExecution in Test := false
+Test / parallelExecution := false
 
 startYear := Some(2020)
 

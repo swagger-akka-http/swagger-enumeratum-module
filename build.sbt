@@ -20,12 +20,12 @@ Test / publishArtifact in Test := false
 pomIncludeRepository := { x => false }
 
 libraryDependencies ++= Seq(
-  "io.swagger.core.v3" % "swagger-core" % "2.1.9",
+  "io.swagger.core.v3" % "swagger-core" % "2.1.10",
   "com.github.swagger-akka-http" %% "swagger-scala-module" % "2.3.1",
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.12.3",
-  "com.beachape" %% "enumeratum" % "1.6.1",
+  "com.beachape" %% "enumeratum" % "1.7.0",
   "org.scalatest" %% "scalatest" % "3.2.9" % Test,
-  "org.slf4j" % "slf4j-simple" % "1.7.30" % Test
+  "org.slf4j" % "slf4j-simple" % "1.7.31" % Test
 )
 
 publishTo := {

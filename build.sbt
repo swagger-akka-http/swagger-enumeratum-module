@@ -7,7 +7,7 @@ organization := "com.github.swagger-akka-http"
 
 scalaVersion := "2.13.6"
 
-crossScalaVersions := Seq("2.11.12", "2.12.13", scalaVersion.value)
+crossScalaVersions := Seq("2.11.12", "2.12.14", scalaVersion.value)
 
 ThisBuild / organizationHomepage := Some(url("https://github.com/swagger-akka-http/swagger-enumeratum-module"))
 
@@ -25,7 +25,7 @@ libraryDependencies ++= Seq(
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.12.4",
   "com.beachape" %% "enumeratum" % "1.7.0",
   "org.scalatest" %% "scalatest" % "3.2.9" % Test,
-  "org.slf4j" % "slf4j-simple" % "1.7.31" % Test
+  "org.slf4j" % "slf4j-simple" % "1.7.32" % Test
 )
 
 publishTo := {

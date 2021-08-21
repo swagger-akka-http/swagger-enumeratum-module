@@ -5,9 +5,9 @@ import Keys._
 
 organization := "com.github.swagger-akka-http"
 
-scalaVersion := "2.13.6"
+ThisBuild / scalaVersion := "2.13.6"
 
-crossScalaVersions := Seq("2.11.12", "2.12.14", scalaVersion.value)
+ThisBuild / crossScalaVersions := Seq("2.11.12", "2.12.14", scalaVersion.value)
 
 ThisBuild / organizationHomepage := Some(url("https://github.com/swagger-akka-http/swagger-enumeratum-module"))
 
@@ -15,7 +15,7 @@ ThisBuild / scalacOptions ++= Seq("-encoding", "UTF-8", "-deprecation", "-unchec
 
 publishMavenStyle := true
 
-Test / publishArtifact in Test := false
+Test / publishArtifact := false
 
 pomIncludeRepository := { x => false }
 
@@ -74,3 +74,21 @@ pomExtra := {
       </developers>
   )
 }
+
+ThisBuild / githubWorkflowTargetTags ++= Seq("v*")
+ThisBuild / githubWorkflowPublishTargetBranches := Seq(
+  RefPredicate.Equals(Ref.Branch("main")),
+  RefPredicate.StartsWith(Ref.Tag("v"))
+)
+
+ThisBuild / githubWorkflowPublish := Seq(
+  WorkflowStep.Sbt(
+    List("ci-release"),
+    env = Map(
+      "PGP_PASSPHRASE" -> "${{ secrets.PGP_PASSPHRASE }}",
+      "PGP_SECRET" -> "${{ secrets.PGP_SECRET }}",
+      "SONATYPE_PASSWORD" -> "${{ secrets.SONATYPE_PASSWORD }}",
+      "SONATYPE_USERNAME" -> "${{ secrets.SONATYPE_USERNAME }}"
+    )
+  )
+)

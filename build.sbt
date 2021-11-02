@@ -5,9 +5,9 @@ import Keys._
 
 organization := "com.github.swagger-akka-http"
 
-ThisBuild / scalaVersion := "2.13.6"
+ThisBuild / scalaVersion := "2.13.7"
 
-ThisBuild / crossScalaVersions := Seq("2.11.12", "2.12.15", "2.13.6")
+ThisBuild / crossScalaVersions := Seq("2.11.12", "2.12.15", "2.13.7")
 
 ThisBuild / organizationHomepage := Some(url("https://github.com/swagger-akka-http/swagger-enumeratum-module"))
 

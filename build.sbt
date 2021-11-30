@@ -52,7 +52,7 @@ pomExtra := {
   )
 }
 
-ThisBuild / githubWorkflowJavaVersions := Seq("temurin@1.8")
+ThisBuild / githubWorkflowJavaVersions := Seq("zulu@1.8")
 ThisBuild / githubWorkflowTargetTags ++= Seq("v*")
 ThisBuild / githubWorkflowPublishTargetBranches := Seq(
   RefPredicate.Equals(Ref.Branch("main")),

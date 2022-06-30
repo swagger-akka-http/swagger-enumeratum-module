@@ -2,7 +2,7 @@ package com.github.swagger.enumeratum.converter
 
 import io.swagger.v3.core.converter._
 import io.swagger.v3.oas.models.media._
-import models.{Ctx, ModelWCtxEnum, ModelWEnum, ModelWEnumAnnotated, ModelWOptionalEnum, OrderSize}
+import models.{Ctx, ModelWCtxEnum, ModelWEnum, ModelWEnumAnnotated, ModelWEnumSet, ModelWOptionalEnum, OrderSize}
 import org.scalatest.OptionValues
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -31,6 +31,18 @@ class ModelPropertyParserTest extends AnyFlatSpec with Matchers with OptionValue
     field shouldBe a [StringSchema]
     field.asInstanceOf[StringSchema].getEnum.asScala shouldEqual OrderSize.values.map(_.entryName)
     nullSafeList(model.value.getRequired) shouldBe empty
+  }
+  it should "process Model with Enumeratum Set" in {
+    val converter = ModelConverters.getInstance()
+    val schemas = converter.readAll(classOf[ModelWEnumSet]).asScala.toMap
+    val model = findModel(schemas, "ModelWEnumSet")
+    model should be (defined)
+    model.get.getProperties should not be (null)
+    val field = model.value.getProperties.get("sizes")
+    field shouldBe a [ArraySchema]
+    val arraySchema = field.asInstanceOf[ArraySchema]
+    arraySchema.getItems.getEnum.asScala shouldEqual OrderSize.values.map(_.entryName)
+    nullSafeList(model.value.getRequired) shouldEqual List("sizes")
   }
   it should "process Model with Annotated Enumeratum Enum" in {
     val converter = ModelConverters.getInstance()

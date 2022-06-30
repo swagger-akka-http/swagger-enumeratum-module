@@ -2,8 +2,6 @@ package models
 
 import enumeratum.{Enum, EnumEntry}
 
-case class SModelWithEnum(orderSize: OrderSize = OrderSize.TALL)
-
 sealed abstract class OrderSize extends EnumEntry
 
 object OrderSize extends Enum[OrderSize] {

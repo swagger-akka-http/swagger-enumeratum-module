@@ -14,34 +14,34 @@ import io.swagger.v3.oas.models.media.Schema
 class SwaggerEnumeratumModelConverter extends ModelResolver(Json.mapper()) {
   private val enumEntryClass = classOf[EnumEntry]
 
+  def noneIfEmpty(s: String): Option[String] = Option(s).filter(_.trim.nonEmpty)
+
   override def resolve(annotatedType: AnnotatedType, context: ModelConverterContext, chain: Iterator[ModelConverter]): Schema[_] = {
     val javaType = _mapper.constructType(annotatedType.getType)
     val cls = javaType.getRawClass
     if (isEnum(cls)) {
       val sp: Schema[String] = PrimitiveType.STRING.createProperty().asInstanceOf[Schema[String]]
       setRequired(annotatedType)
-      getValues(cls).foreach { v =>
+      getValues(cls).foreach { v: String =>
         sp.addEnumItemObject(v)
       }
       nullSafeList(annotatedType.getCtxAnnotations).foreach {
         case p: Parameter => {
-          Option(p.description).foreach(desc => sp.setDescription(desc))
+          noneIfEmpty(p.description).foreach(desc => sp.setDescription(desc))
           sp.setDeprecated(p.deprecated)
-          Option(p.example).foreach(ex => sp.setExample(ex))
-          Option(p.name).foreach(name => sp.setName(name))
+          noneIfEmpty(p.example).foreach(ex => sp.setExample(ex))
+          noneIfEmpty(p.name).foreach(name => sp.setName(name))
         }
         case s: SchemaAnnotation => {
-          Option(s.description).foreach(desc => sp.setDescription(desc))
-          Option(s.defaultValue).foreach(df => sp.setDefault(df))
+          noneIfEmpty(s.description).foreach(desc => sp.setDescription(desc))
+          noneIfEmpty(s.defaultValue).foreach(df => sp.setDefault(df))
           sp.setDeprecated(s.deprecated)
-          Option(s.example).foreach(ex => sp.setExample(ex))
-          Option(s.name).foreach(name => sp.setName(name))
-          Option(s.accessMode).foreach { accessMode =>
-            accessMode match {
-              case AccessMode.READ_ONLY => sp.setReadOnly(true)
-              case AccessMode.WRITE_ONLY => sp.setWriteOnly(true)
-              case _ =>
-            }
+          noneIfEmpty(s.example).foreach(ex => sp.setExample(ex))
+          noneIfEmpty(s.name).foreach(name => sp.setName(name))
+          Option(s.accessMode).foreach {
+            case AccessMode.READ_ONLY => sp.setReadOnly(true)
+            case AccessMode.WRITE_ONLY => sp.setWriteOnly(true)
+            case _ =>
           }
         }
         case _ =>

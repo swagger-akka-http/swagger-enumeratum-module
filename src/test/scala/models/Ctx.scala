@@ -1,6 +1,7 @@
 package models
 
 import enumeratum.{Enum, EnumEntry}
+import io.swagger.v3.oas.annotations.media.Schema
 
 object Ctx {
   sealed abstract class Color(override val entryName: String) extends EnumEntry
@@ -16,3 +17,5 @@ object Ctx {
 }
 
 case class ModelWCtxEnum(field: Ctx.Color)
+
+case class ModelWCtxEnumAndAnnotation(@Schema(description = "An annotated field", required = true) field: Ctx.Color)

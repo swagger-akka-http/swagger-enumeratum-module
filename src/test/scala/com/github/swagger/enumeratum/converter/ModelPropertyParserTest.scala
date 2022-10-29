@@ -2,7 +2,7 @@ package com.github.swagger.enumeratum.converter
 
 import io.swagger.v3.core.converter._
 import io.swagger.v3.oas.models.media._
-import models.{Ctx, ModelWCtxEnum, ModelWEnum, ModelWEnumAnnotated, ModelWEnumSet, ModelWOptionalEnum, OrderSize}
+import models.{Ctx, ModelWCtxEnum, ModelWCtxEnumAndAnnotation, ModelWEnum, ModelWEnumAnnotated, ModelWEnumSet, ModelWOptionalEnum, OrderSize}
 import org.scalatest.OptionValues
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -60,6 +60,7 @@ class ModelPropertyParserTest extends AnyFlatSpec with Matchers with OptionValue
   it should "process Model for Enumeratum Enum defined in scope of another object" in {
     val converter = ModelConverters.getInstance()
     val schemas = converter.readAll(classOf[ModelWCtxEnum]).asScala.toMap
+    schemas.keys should have size 1
     val model = findModel(schemas, "ModelWCtxEnum")
     model should be (defined)
     model.get.getProperties should not be (null)
@@ -69,6 +70,12 @@ class ModelPropertyParserTest extends AnyFlatSpec with Matchers with OptionValue
     schema.getDescription shouldEqual (null)
     schema.getEnum.asScala shouldEqual Ctx.Color.values.map(_.entryName)
     nullSafeList(model.value.getRequired) shouldBe Seq("field")
+  }
+
+  it should "not add additional model when enum field is annotated" in {
+    val converter = ModelConverters.getInstance()
+    val schemas = converter.readAll(classOf[ModelWCtxEnumAndAnnotation]).asScala.toMap
+    schemas.keys should have size 1
   }
 
   def findModel(schemas: Map[String, Schema[_]], name: String): Option[Schema[_]] = {

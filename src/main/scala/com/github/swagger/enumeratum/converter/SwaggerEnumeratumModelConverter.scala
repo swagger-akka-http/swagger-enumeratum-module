@@ -28,14 +28,14 @@ class SwaggerEnumeratumModelConverter extends ModelResolver(Json.mapper()) {
       nullSafeList(annotatedType.getCtxAnnotations).foreach {
         case p: Parameter => {
           noneIfEmpty(p.description).foreach(desc => sp.setDescription(desc))
-          if (p.deprecated) { sp.setDeprecated(true)}
+          if (p.deprecated) sp.setDeprecated(true)
           noneIfEmpty(p.example).foreach(ex => sp.setExample(ex))
           noneIfEmpty(p.name).foreach(name => sp.setName(name))
         }
         case s: SchemaAnnotation => {
           noneIfEmpty(s.description).foreach(desc => sp.setDescription(desc))
           noneIfEmpty(s.defaultValue).foreach(df => sp.setDefault(df))
-          if (s.deprecated) { sp.setDeprecated(true)}
+          if (s.deprecated) sp.setDeprecated(true)
           noneIfEmpty(s.example).foreach(ex => sp.setExample(ex))
           noneIfEmpty(s.name).foreach(name => sp.setName(name))
           Option(s.accessMode).foreach {

@@ -87,6 +87,7 @@ class ModelPropertyParserTest extends AnyFlatSpec with Matchers with OptionValue
     schema.getDescription shouldEqual "An annotated field"
     schema.getName shouldEqual "field"
     schema.getDefault should be (null)
+    schema.getDeprecated should be (null)
     schema.getEnum.asScala shouldEqual Ctx.Color.values.map(_.entryName)
     nullSafeList(model.value.getRequired) shouldBe Seq("field")
   }

@@ -73,8 +73,11 @@ class ModelPropertyParserTest extends AnyFlatSpec with Matchers with OptionValue
     val model = findModel(schemas, "ModelWCtxEnum")
     model should be(defined)
     model.get.getProperties should not be (null)
+
     val field = model.value.getProperties.get("field")
     field shouldBe a[StringSchema]
+    field.asInstanceOf[StringSchema].getRequired shouldBe Seq.empty
+
     val schema = field.asInstanceOf[StringSchema]
     schema.getDescription shouldEqual (null)
     schema.getDefault should be(null)

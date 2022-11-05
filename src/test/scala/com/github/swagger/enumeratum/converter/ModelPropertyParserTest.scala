@@ -2,7 +2,16 @@ package com.github.swagger.enumeratum.converter
 
 import io.swagger.v3.core.converter._
 import io.swagger.v3.oas.models.media._
-import models.{Ctx, ModelWCtxEnum, ModelWCtxEnumAndAnnotation, ModelWEnum, ModelWEnumAnnotated, ModelWEnumSet, ModelWOptionalEnum, OrderSize}
+import models.{
+  Ctx,
+  ModelWCtxEnum,
+  ModelWCtxEnumAndAnnotation,
+  ModelWEnum,
+  ModelWEnumAnnotated,
+  ModelWEnumSet,
+  ModelWOptionalEnum,
+  OrderSize
+}
 import org.scalatest.OptionValues
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -14,10 +23,10 @@ class ModelPropertyParserTest extends AnyFlatSpec with Matchers with OptionValue
     val converter = ModelConverters.getInstance()
     val schemas = converter.readAll(classOf[ModelWEnum]).asScala.toMap
     val model = findModel(schemas, "ModelWEnum")
-    model should be (defined)
+    model should be(defined)
     model.get.getProperties should not be (null)
     val field = model.value.getProperties.get("field")
-    field shouldBe a [StringSchema]
+    field shouldBe a[StringSchema]
     field.asInstanceOf[StringSchema].getEnum.asScala shouldEqual OrderSize.values.map(_.entryName)
     nullSafeList(model.value.getRequired) shouldBe Seq("field")
   }
@@ -25,10 +34,10 @@ class ModelPropertyParserTest extends AnyFlatSpec with Matchers with OptionValue
     val converter = ModelConverters.getInstance()
     val schemas = converter.readAll(classOf[ModelWOptionalEnum]).asScala.toMap
     val model = findModel(schemas, "ModelWOptionalEnum")
-    model should be (defined)
+    model should be(defined)
     model.get.getProperties should not be (null)
     val field = model.value.getProperties.get("field")
-    field shouldBe a [StringSchema]
+    field shouldBe a[StringSchema]
     field.asInstanceOf[StringSchema].getEnum.asScala shouldEqual OrderSize.values.map(_.entryName)
     nullSafeList(model.value.getRequired) shouldBe empty
   }
@@ -36,10 +45,10 @@ class ModelPropertyParserTest extends AnyFlatSpec with Matchers with OptionValue
     val converter = ModelConverters.getInstance()
     val schemas = converter.readAll(classOf[ModelWEnumSet]).asScala.toMap
     val model = findModel(schemas, "ModelWEnumSet")
-    model should be (defined)
+    model should be(defined)
     model.get.getProperties should not be (null)
     val field = model.value.getProperties.get("sizes")
-    field shouldBe a [ArraySchema]
+    field shouldBe a[ArraySchema]
     val arraySchema = field.asInstanceOf[ArraySchema]
     arraySchema.getItems.getEnum.asScala shouldEqual OrderSize.values.map(_.entryName)
     nullSafeList(model.value.getRequired) shouldEqual List("sizes")
@@ -48,10 +57,10 @@ class ModelPropertyParserTest extends AnyFlatSpec with Matchers with OptionValue
     val converter = ModelConverters.getInstance()
     val schemas = converter.readAll(classOf[ModelWEnumAnnotated]).asScala.toMap
     val model = findModel(schemas, "ModelWEnumAnnotated")
-    model should be (defined)
+    model should be(defined)
     model.get.getProperties should not be (null)
     val field = model.value.getProperties.get("field")
-    field shouldBe a [StringSchema]
+    field shouldBe a[StringSchema]
     val schema = field.asInstanceOf[StringSchema]
     schema.getDescription shouldEqual "enum value"
     schema.getEnum.asScala shouldEqual OrderSize.values.map(_.entryName)
@@ -62,13 +71,13 @@ class ModelPropertyParserTest extends AnyFlatSpec with Matchers with OptionValue
     val schemas = converter.readAll(classOf[ModelWCtxEnum]).asScala.toMap
     schemas.keys should have size 1
     val model = findModel(schemas, "ModelWCtxEnum")
-    model should be (defined)
+    model should be(defined)
     model.get.getProperties should not be (null)
     val field = model.value.getProperties.get("field")
-    field shouldBe a [StringSchema]
+    field shouldBe a[StringSchema]
     val schema = field.asInstanceOf[StringSchema]
     schema.getDescription shouldEqual (null)
-    schema.getDefault should be (null)
+    schema.getDefault should be(null)
     schema.getEnum.asScala shouldEqual Ctx.Color.values.map(_.entryName)
     nullSafeList(model.value.getRequired) shouldBe Seq("field")
   }
@@ -86,8 +95,8 @@ class ModelPropertyParserTest extends AnyFlatSpec with Matchers with OptionValue
     val schema = field.asInstanceOf[StringSchema]
     schema.getDescription shouldEqual "An annotated field"
     schema.getName shouldEqual "field"
-    schema.getDefault should be (null)
-    schema.getDeprecated should be (null)
+    schema.getDefault should be(null)
+    schema.getDeprecated should be(null)
     schema.getEnum.asScala shouldEqual Ctx.Color.values.map(_.entryName)
     nullSafeList(model.value.getRequired) shouldBe Seq("field")
   }

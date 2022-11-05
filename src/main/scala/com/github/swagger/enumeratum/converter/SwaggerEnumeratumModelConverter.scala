@@ -97,4 +97,3 @@ class SwaggerEnumeratumModelConverter extends ModelResolver(Json.mapper()) {
     case Some(arr) => arr.toList
   }
 }
-

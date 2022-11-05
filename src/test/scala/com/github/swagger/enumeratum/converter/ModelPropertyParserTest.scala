@@ -3,6 +3,7 @@ package com.github.swagger.enumeratum.converter
 import io.swagger.v3.core.converter._
 import io.swagger.v3.oas.models.media._
 import models.{
+  Animal,
   Ctx,
   ModelWCtxEnum,
   ModelWCtxEnumAndAnnotation,
@@ -76,13 +77,33 @@ class ModelPropertyParserTest extends AnyFlatSpec with Matchers with OptionValue
 
     val field = model.value.getProperties.get("field")
     field shouldBe a[StringSchema]
-    field.asInstanceOf[StringSchema].getRequired shouldBe Seq.empty
+    field.asInstanceOf[StringSchema].getRequired shouldBe null
 
     val schema = field.asInstanceOf[StringSchema]
     schema.getDescription shouldEqual (null)
     schema.getDefault should be(null)
     schema.getEnum.asScala shouldEqual Ctx.Color.values.map(_.entryName)
     nullSafeList(model.value.getRequired) shouldBe Seq("field")
+  }
+
+  it should "process sealed abstract class" in {
+    val converter = ModelConverters.getInstance()
+    val schemas = converter.readAll(classOf[Animal]).asScala.toMap
+    val catModel = findModel(schemas, "Cat")
+    catModel should be(defined)
+    val catProps = catModel.value.getProperties
+    catProps should have size 3
+    catProps.get("name") shouldBe a[StringSchema]
+    catProps.get("age") shouldBe a[IntegerSchema]
+    catProps.get("animalType") shouldBe a[StringSchema]
+    catModel.value.getRequired.asScala shouldEqual Seq("age", "animalType", "name")
+    val dogModel = findModel(schemas, "Dog")
+    dogModel should be(defined)
+    val dogProps = dogModel.value.getProperties
+    dogProps should have size 2
+    dogProps.get("name") shouldBe a[StringSchema]
+    dogProps.get("animalType") shouldBe a[StringSchema]
+    dogModel.value.getRequired.asScala shouldEqual Seq("animalType", "name")
   }
 
   it should "not add additional model when enum field is annotated" in {

@@ -28,7 +28,7 @@ class ModelPropertyParserTest extends AnyFlatSpec with Matchers with OptionValue
     model.get.getProperties should not be (null)
     val field = model.value.getProperties.get("field")
     field shouldBe a[StringSchema]
-    field.asInstanceOf[StringSchema].getEnum.asScala shouldEqual OrderSize.values.map(_.entryName)
+    nullSafeList(field.asInstanceOf[StringSchema].getEnum) shouldEqual OrderSize.values.map(_.entryName)
     nullSafeList(model.value.getRequired) shouldBe Seq("field")
   }
   it should "process Model with Optional Enumeratum Enum" in {
@@ -39,7 +39,7 @@ class ModelPropertyParserTest extends AnyFlatSpec with Matchers with OptionValue
     model.get.getProperties should not be (null)
     val field = model.value.getProperties.get("field")
     field shouldBe a[StringSchema]
-    field.asInstanceOf[StringSchema].getEnum.asScala shouldEqual OrderSize.values.map(_.entryName)
+    nullSafeList(field.asInstanceOf[StringSchema].getEnum) shouldEqual OrderSize.values.map(_.entryName)
     nullSafeList(model.value.getRequired) shouldBe empty
   }
   it should "process Model with Enumeratum Set" in {
@@ -51,7 +51,7 @@ class ModelPropertyParserTest extends AnyFlatSpec with Matchers with OptionValue
     val field = model.value.getProperties.get("sizes")
     field shouldBe a[ArraySchema]
     val arraySchema = field.asInstanceOf[ArraySchema]
-    arraySchema.getItems.getEnum.asScala shouldEqual OrderSize.values.map(_.entryName)
+    nullSafeList(arraySchema.getItems.getEnum) shouldEqual OrderSize.values.map(_.entryName)
     nullSafeList(model.value.getRequired) shouldEqual List("sizes")
   }
   it should "process Model with Annotated Enumeratum Enum" in {
@@ -64,7 +64,7 @@ class ModelPropertyParserTest extends AnyFlatSpec with Matchers with OptionValue
     field shouldBe a[StringSchema]
     val schema = field.asInstanceOf[StringSchema]
     schema.getDescription shouldEqual "enum value"
-    schema.getEnum.asScala shouldEqual OrderSize.values.map(_.entryName)
+    nullSafeList(schema.getEnum) shouldEqual OrderSize.values.map(_.entryName)
     nullSafeList(model.value.getRequired) shouldBe Seq.empty
   }
   it should "process Model for Enumeratum Enum defined in scope of another object" in {
@@ -82,7 +82,7 @@ class ModelPropertyParserTest extends AnyFlatSpec with Matchers with OptionValue
     val schema = field.asInstanceOf[StringSchema]
     schema.getDescription shouldEqual (null)
     schema.getDefault should be(null)
-    schema.getEnum.asScala shouldEqual Ctx.Color.values.map(_.entryName)
+    nullSafeList(schema.getEnum) shouldEqual Ctx.Color.values.map(_.entryName)
     nullSafeList(model.value.getRequired) shouldBe Seq("field")
   }
 
@@ -96,14 +96,14 @@ class ModelPropertyParserTest extends AnyFlatSpec with Matchers with OptionValue
     catProps.get("name") shouldBe a[StringSchema]
     catProps.get("age") shouldBe a[IntegerSchema]
     catProps.get("animalType") shouldBe a[StringSchema]
-    catModel.value.getRequired.asScala shouldEqual Seq("age", "animalType", "name")
+    nullSafeList(catModel.value.getRequired) shouldEqual Seq("age", "animalType", "name")
     val dogModel = findModel(schemas, "Dog")
     dogModel should be(defined)
     val dogProps = dogModel.value.getProperties
     dogProps should have size 2
     dogProps.get("name") shouldBe a[StringSchema]
     dogProps.get("animalType") shouldBe a[StringSchema]
-    dogModel.value.getRequired.asScala shouldEqual Seq("animalType", "name")
+    nullSafeList(dogModel.value.getRequired) shouldEqual Seq("animalType", "name")
   }
 
   it should "not add additional model when enum field is annotated" in {
@@ -121,7 +121,7 @@ class ModelPropertyParserTest extends AnyFlatSpec with Matchers with OptionValue
     schema.getName shouldEqual "field"
     schema.getDefault should be(null)
     schema.getDeprecated should be(null)
-    schema.getEnum.asScala shouldEqual Ctx.Color.values.map(_.entryName)
+    nullSafeList(schema.getEnum) shouldEqual Ctx.Color.values.map(_.entryName)
     nullSafeList(model.value.getRequired) shouldBe Seq("field")
   }
 

@@ -41,7 +41,7 @@ releasePublishArtifactsAction := PgpKeys.publishSigned.value
 
 pomExtra := {
   pomExtra.value ++ Group(
-    <issueManagement>
+      <issueManagement>
         <system>github</system>
         <url>https://github.com/swagger-api/swagger-enumeratum-module/issues</url>
       </issueManagement>

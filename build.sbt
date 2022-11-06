@@ -18,11 +18,11 @@ Test / publishArtifact := false
 
 pomIncludeRepository := { x => false }
 
-resolvers ++= Resolver.sonatypeOssRepos("snapshots")
+//resolvers ++= Resolver.sonatypeOssRepos("snapshots")
 
 libraryDependencies ++= Seq(
   "io.swagger.core.v3" % "swagger-core-jakarta" % "2.2.4",
-  "com.github.swagger-akka-http" %% "swagger-scala-module" % "2.7.8+9-e2a8fbb1-SNAPSHOT",
+  "com.github.swagger-akka-http" %% "swagger-scala-module" % "2.7.9",
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.13.4",
   "com.beachape" %% "enumeratum" % "1.7.0",
   "org.scalatest" %% "scalatest" % "3.2.14" % Test,

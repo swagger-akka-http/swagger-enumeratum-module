@@ -1,20 +1,22 @@
 package com.github.swagger.enumeratum.converter
 
 import java.util.Iterator
-import com.github.swagger.scala.converter.AnnotatedTypeForOption
+import com.github.swagger.scala.converter.{AnnotatedTypeForOption, SwaggerScalaModelConverter}
 import enumeratum.{Enum, EnumEntry}
 import io.swagger.v3.core.converter._
 import io.swagger.v3.core.jackson.ModelResolver
 import io.swagger.v3.core.util.{Json, PrimitiveType}
 import io.swagger.v3.oas.annotations.Parameter
-import io.swagger.v3.oas.annotations.media.Schema.AccessMode
-import io.swagger.v3.oas.annotations.media.{Schema => SchemaAnnotation}
+import io.swagger.v3.oas.annotations.media.Schema.{AccessMode, RequiredMode}
+import io.swagger.v3.oas.annotations.media.{ArraySchema, Schema => SchemaAnnotation}
 import io.swagger.v3.oas.models.media.Schema
+
+import java.lang.annotation.Annotation
 
 class SwaggerEnumeratumModelConverter extends ModelResolver(Json.mapper()) {
   private val enumEntryClass = classOf[EnumEntry]
 
-  def noneIfEmpty(s: String): Option[String] = Option(s).filter(_.trim.nonEmpty)
+  private def noneIfEmpty(s: String): Option[String] = Option(s).filter(_.trim.nonEmpty)
 
   override def resolve(annotatedType: AnnotatedType, context: ModelConverterContext, chain: Iterator[ModelConverter]): Schema[_] = {
     val javaType = _mapper.constructType(annotatedType.getType)
@@ -84,11 +86,43 @@ class SwaggerEnumeratumModelConverter extends ModelResolver(Json.mapper()) {
 
   private def getRequiredSettings(annotatedType: AnnotatedType): Seq[Boolean] = annotatedType match {
     case _: AnnotatedTypeForOption => Seq.empty
-    case _ => {
-      nullSafeList(annotatedType.getCtxAnnotations).collect {
-        case p: Parameter => p.required()
-        case s: SchemaAnnotation => s.required()
+    case _ => getRequiredSettings(nullSafeList(annotatedType.getCtxAnnotations))
+  }
+
+  private def getRequiredSettings(annotations: Seq[Annotation]): Seq[Boolean] = {
+    val flags = annotations.collect {
+      case p: Parameter => if (p.required()) RequiredMode.REQUIRED else RequiredMode.NOT_REQUIRED
+      case s: SchemaAnnotation => {
+        if (s.requiredMode() == RequiredMode.AUTO) {
+          if (s.required()) {
+            RequiredMode.REQUIRED
+          } else if (SwaggerScalaModelConverter.isRequiredBasedOnAnnotation) {
+            RequiredMode.NOT_REQUIRED
+          } else {
+            RequiredMode.AUTO
+          }
+        } else {
+          s.requiredMode()
+        }
       }
+      case a: ArraySchema => {
+        if (a.arraySchema().requiredMode() == RequiredMode.AUTO) {
+          if (a.arraySchema().required()) {
+            RequiredMode.REQUIRED
+          } else if (SwaggerScalaModelConverter.isRequiredBasedOnAnnotation) {
+            RequiredMode.NOT_REQUIRED
+          } else {
+            RequiredMode.AUTO
+          }
+        } else {
+          a.arraySchema().requiredMode()
+        }
+      }
+    }
+    flags.flatMap {
+      case RequiredMode.REQUIRED => Some(true)
+      case RequiredMode.NOT_REQUIRED => Some(false)
+      case _ => None
     }
   }
 

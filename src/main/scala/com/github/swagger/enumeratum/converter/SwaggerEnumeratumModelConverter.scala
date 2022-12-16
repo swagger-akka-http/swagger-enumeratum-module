@@ -7,11 +7,9 @@ import io.swagger.v3.core.converter._
 import io.swagger.v3.core.jackson.ModelResolver
 import io.swagger.v3.core.util.{Json, PrimitiveType}
 import io.swagger.v3.oas.annotations.Parameter
-import io.swagger.v3.oas.annotations.media.Schema.{AccessMode, RequiredMode}
-import io.swagger.v3.oas.annotations.media.{ArraySchema, Schema => SchemaAnnotation}
+import io.swagger.v3.oas.annotations.media.Schema.AccessMode
+import io.swagger.v3.oas.annotations.media.{Schema => SchemaAnnotation}
 import io.swagger.v3.oas.models.media.Schema
-
-import java.lang.annotation.Annotation
 
 class SwaggerEnumeratumModelConverter extends ModelResolver(Json.mapper()) {
   private val enumEntryClass = classOf[EnumEntry]
@@ -66,14 +64,14 @@ class SwaggerEnumeratumModelConverter extends ModelResolver(Json.mapper()) {
   private def isEnum(cls: Class[_]): Boolean = enumEntryClass.isAssignableFrom(cls)
 
   private def getValues(cls: Class[_]): Seq[String] = {
-    val enum = Class.forName(cls.getName + "$").getField("MODULE$").get(null).asInstanceOf[Enum[EnumEntry]]
-    enum.values.map(_.entryName)
+    val enumEntry = Class.forName(cls.getName + "$").getField("MODULE$").get(null).asInstanceOf[Enum[EnumEntry]]
+    enumEntry.values.map(_.entryName)
   }
 
   private def setRequired(annotatedType: AnnotatedType): Unit = annotatedType match {
     case _: AnnotatedTypeForOption => // not required
     case _ => {
-      val required = getRequiredSettings(annotatedType).headOption.getOrElse(true)
+      val required = SwaggerScalaModelConverter.getRequiredSettings(annotatedType).headOption.getOrElse(true)
       if (required) {
         Option(annotatedType.getParent).foreach { parent =>
           Option(annotatedType.getPropertyName).foreach { n =>
@@ -81,48 +79,6 @@ class SwaggerEnumeratumModelConverter extends ModelResolver(Json.mapper()) {
           }
         }
       }
-    }
-  }
-
-  private def getRequiredSettings(annotatedType: AnnotatedType): Seq[Boolean] = annotatedType match {
-    case _: AnnotatedTypeForOption => Seq.empty
-    case _ => getRequiredSettings(nullSafeList(annotatedType.getCtxAnnotations))
-  }
-
-  private def getRequiredSettings(annotations: Seq[Annotation]): Seq[Boolean] = {
-    val flags = annotations.collect {
-      case p: Parameter => if (p.required()) RequiredMode.REQUIRED else RequiredMode.NOT_REQUIRED
-      case s: SchemaAnnotation => {
-        if (s.requiredMode() == RequiredMode.AUTO) {
-          if (s.required()) {
-            RequiredMode.REQUIRED
-          } else if (SwaggerScalaModelConverter.isRequiredBasedOnAnnotation) {
-            RequiredMode.NOT_REQUIRED
-          } else {
-            RequiredMode.AUTO
-          }
-        } else {
-          s.requiredMode()
-        }
-      }
-      case a: ArraySchema => {
-        if (a.arraySchema().requiredMode() == RequiredMode.AUTO) {
-          if (a.arraySchema().required()) {
-            RequiredMode.REQUIRED
-          } else if (SwaggerScalaModelConverter.isRequiredBasedOnAnnotation) {
-            RequiredMode.NOT_REQUIRED
-          } else {
-            RequiredMode.AUTO
-          }
-        } else {
-          a.arraySchema().requiredMode()
-        }
-      }
-    }
-    flags.flatMap {
-      case RequiredMode.REQUIRED => Some(true)
-      case RequiredMode.NOT_REQUIRED => Some(false)
-      case _ => None
     }
   }
 

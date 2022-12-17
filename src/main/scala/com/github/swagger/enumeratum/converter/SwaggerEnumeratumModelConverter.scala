@@ -22,7 +22,7 @@ class SwaggerEnumeratumModelConverter extends ModelResolver(Json.mapper()) {
     if (isEnum(cls)) {
       val sp: Schema[String] = PrimitiveType.STRING.createProperty().asInstanceOf[Schema[String]]
       setRequired(annotatedType)
-      getValues(cls).foreach { v: String =>
+      getValues(cls).foreach { v =>
         sp.addEnumItemObject(v)
       }
       nullSafeList(annotatedType.getCtxAnnotations).foreach {

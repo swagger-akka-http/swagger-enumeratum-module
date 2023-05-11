@@ -55,6 +55,8 @@ pomExtra := {
   )
 }
 
+MetaInfLicenseCopy.settings
+
 ThisBuild / githubWorkflowJavaVersions := Seq(JavaSpec(Zulu, "8"))
 ThisBuild / githubWorkflowPublishTargetBranches := Seq(
   RefPredicate.Equals(Ref.Branch("main")),

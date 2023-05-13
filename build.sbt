@@ -43,7 +43,7 @@ pomExtra := {
   pomExtra.value ++ Group(
       <issueManagement>
         <system>github</system>
-        <url>https://github.com/swagger-api/swagger-enumeratum-module/issues</url>
+        <url>https://github.com/swagger-akka-http/swagger-enumeratum-module/issues</url>
       </issueManagement>
       <developers>
         <developer>

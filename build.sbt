@@ -21,7 +21,7 @@ pomIncludeRepository := { x => false }
 //resolvers ++= Resolver.sonatypeOssRepos("snapshots")
 
 libraryDependencies ++= Seq(
-  "io.swagger.core.v3" % "swagger-core-jakarta" % "2.2.9",
+  "io.swagger.core.v3" % "swagger-core-jakarta" % "2.2.10",
   "com.github.swagger-akka-http" %% "swagger-scala-module" % "2.9.1",
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.14.3",
   "com.beachape" %% "enumeratum" % "1.7.2",

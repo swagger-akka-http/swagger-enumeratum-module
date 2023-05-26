@@ -8,7 +8,7 @@ organization := "com.github.swagger-akka-http"
 
 ThisBuild / scalaVersion := "2.13.10"
 
-ThisBuild / crossScalaVersions := Seq("2.11.12", "2.12.17", "2.13.10", "3.2.2")
+ThisBuild / crossScalaVersions := Seq("2.11.12", "2.12.17", "2.13.10", "3.3.0")
 
 ThisBuild / organizationHomepage := Some(url("https://github.com/swagger-akka-http/swagger-enumeratum-module"))
 
@@ -22,7 +22,7 @@ pomIncludeRepository := { x => false }
 
 libraryDependencies ++= Seq(
   "io.swagger.core.v3" % "swagger-core-jakarta" % "2.2.10",
-  "com.github.swagger-akka-http" %% "swagger-scala-module" % "2.9.1",
+  "com.github.swagger-akka-http" %% "swagger-scala-module" % "2.10.0",
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.14.3",
   "com.beachape" %% "enumeratum" % "1.7.2",
   "org.scalatest" %% "scalatest" % "3.2.15" % Test,

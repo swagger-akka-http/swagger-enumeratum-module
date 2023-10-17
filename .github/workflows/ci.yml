@@ -28,13 +28,13 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        scala: [2.11, 2.12, 2.13, 3]
+        scala: [2.12, 2.13, 3]
         java: [zulu@8]
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
     steps:
       - name: Checkout current branch (full)
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -49,7 +49,7 @@ jobs:
 
       - name: sbt update
         if: matrix.java == 'zulu@8' && steps.setup-java-zulu-8.outputs.cache-hit == 'false'
-        run: sbt '++ ${{ matrix.scala }}' reload +update
+        run: sbt +update
 
       - name: Check that workflows are up to date
         run: sbt githubWorkflowCheck
@@ -83,7 +83,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (full)
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -98,17 +98,7 @@ jobs:
 
       - name: sbt update
         if: matrix.java == 'zulu@8' && steps.setup-java-zulu-8.outputs.cache-hit == 'false'
-        run: sbt reload +update
-
-      - name: Download target directories (2.11)
-        uses: actions/download-artifact@v3
-        with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.11
-
-      - name: Inflate target directories (2.11)
-        run: |
-          tar xf targets.tar
-          rm targets.tar
+        run: sbt +update
 
       - name: Download target directories (2.12)
         uses: actions/download-artifact@v3

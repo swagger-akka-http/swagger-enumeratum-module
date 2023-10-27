@@ -6,9 +6,9 @@ import org.typelevel.sbt.gha.JavaSpec.Distribution.Zulu
 
 organization := "com.github.swagger-akka-http"
 
-ThisBuild / scalaVersion := "2.13.11"
+ThisBuild / scalaVersion := "2.13.12"
 
-ThisBuild / crossScalaVersions := Seq("2.12.18", "2.13.11", "3.3.0")
+ThisBuild / crossScalaVersions := Seq("2.12.18", "2.13.12", "3.3.0")
 
 ThisBuild / organizationHomepage := Some(url("https://github.com/swagger-akka-http/swagger-enumeratum-module"))
 
@@ -41,7 +41,7 @@ releasePublishArtifactsAction := PgpKeys.publishSigned.value
 
 pomExtra := {
   pomExtra.value ++ Group(
-      <issueManagement>
+    <issueManagement>
         <system>github</system>
         <url>https://github.com/swagger-akka-http/swagger-enumeratum-module/issues</url>
       </issueManagement>

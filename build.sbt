@@ -2,7 +2,7 @@
 import xml.Group
 import sbt._
 import Keys._
-import org.typelevel.sbt.gha.JavaSpec.Distribution.Zulu
+import sbtghactions.JavaSpec.Distribution.Zulu
 
 organization := "com.github.swagger-akka-http"
 
@@ -57,7 +57,6 @@ pomExtra := {
 
 MetaInfLicenseCopy.settings
 
-ThisBuild / tlSonatypeUseLegacyHost := true
 ThisBuild / githubWorkflowJavaVersions := Seq(JavaSpec(Zulu, "8"))
 ThisBuild / githubWorkflowPublishTargetBranches := Seq(
   RefPredicate.Equals(Ref.Branch("main")),

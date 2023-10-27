@@ -1,8 +1,7 @@
 import sbt.*
 import sbt.Keys.*
 
-/**
-  * Copies LICENSE file into jar META-INF dir
+/** Copies LICENSE file into jar META-INF dir
   */
 object MetaInfLicenseCopy {
 

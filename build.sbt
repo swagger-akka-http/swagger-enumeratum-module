@@ -22,7 +22,7 @@ pomIncludeRepository := { x => false }
 
 libraryDependencies ++= Seq(
   "io.swagger.core.v3" % "swagger-core-jakarta" % "2.2.35",
-  "com.github.swagger-akka-http" %% "swagger-scala-module" % "2.13.1",
+  "com.github.swagger-akka-http" %% "swagger-scala-module" % "2.14.0",
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.19.2",
   "com.beachape" %% "enumeratum" % "1.9.0",
   "org.scalatest" %% "scalatest" % "3.2.19" % Test,

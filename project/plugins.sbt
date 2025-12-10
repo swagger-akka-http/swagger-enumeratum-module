@@ -1,6 +1,6 @@
 addSbtPlugin("com.github.sbt" % "sbt-release" % "1.4.0")
 
-addSbtPlugin("org.scoverage" % "sbt-scoverage" % "2.4.2")
+addSbtPlugin("org.scoverage" % "sbt-scoverage" % "2.4.3")
 
 addSbtPlugin("com.github.sbt" % "sbt-github-actions" % "0.29.0")
 

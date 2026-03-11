@@ -119,7 +119,8 @@ class ModelPropertyParserTest extends AnyFlatSpec with Matchers with OptionValue
     val schema = field.asInstanceOf[StringSchema]
     schema.getDescription shouldEqual "An annotated field"
     schema.getName shouldEqual "field"
-    schema.getDefault should be(null)
+    // https://github.com/swagger-api/swagger-core/pull/5063 explains the default value
+    schema.getDefault shouldEqual "##default"
     schema.getDeprecated should be(null)
     nullSafeList(schema.getEnum) shouldEqual Ctx.Color.values.map(_.entryName)
     nullSafeList(model.value.getRequired) shouldBe Seq("field")

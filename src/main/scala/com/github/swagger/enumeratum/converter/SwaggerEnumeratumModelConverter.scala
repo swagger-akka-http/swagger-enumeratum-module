@@ -11,7 +11,9 @@ import io.swagger.v3.oas.annotations.media.Schema.AccessMode
 import io.swagger.v3.oas.annotations.media.{Schema => SchemaAnnotation}
 import io.swagger.v3.oas.models.media.Schema
 
-class SwaggerEnumeratumModelConverter extends ModelResolver(Json.mapper()) {
+// Introspect with the same Scala-aware (and customized) mapper as swagger-scala-module, rather than swagger-core's Json.mapper(),
+// which swagger-scala-module no longer makes Scala-aware.
+class SwaggerEnumeratumModelConverter extends ModelResolver(SwaggerScalaModelConverter.createObjectMapper()) {
   private val enumEntryClass = classOf[EnumEntry]
 
   private def noneIfEmpty(s: String): Option[String] = Option(s).filter(_.trim.nonEmpty)

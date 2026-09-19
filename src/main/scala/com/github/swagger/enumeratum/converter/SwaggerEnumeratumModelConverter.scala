@@ -1,6 +1,8 @@
 package com.github.swagger.enumeratum.converter
 
 import java.util.Iterator
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.github.swagger.scala.converter.{AnnotatedTypeForOption, SwaggerScalaModelConverter}
 import enumeratum.{Enum, EnumEntry}
 import io.swagger.v3.core.converter._
@@ -11,7 +13,13 @@ import io.swagger.v3.oas.annotations.media.Schema.AccessMode
 import io.swagger.v3.oas.annotations.media.{Schema => SchemaAnnotation}
 import io.swagger.v3.oas.models.media.Schema
 
-class SwaggerEnumeratumModelConverter extends ModelResolver(Json.mapper()) {
+object SwaggerEnumeratumModelConverter {
+  // Mirrors swagger-scala-module 2.16: introspect with a private, Scala-aware copy of swagger-core's mapper instead of Json.mapper(),
+  // which is no longer mutated by swagger-scala-module. Switch to SwaggerScalaModelConverter.createObjectMapper() once it is public.
+  private def createObjectMapper(): ObjectMapper = Json.mapper().copy().registerModule(DefaultScalaModule)
+}
+
+class SwaggerEnumeratumModelConverter extends ModelResolver(SwaggerEnumeratumModelConverter.createObjectMapper()) {
   private val enumEntryClass = classOf[EnumEntry]
 
   private def noneIfEmpty(s: String): Option[String] = Option(s).filter(_.trim.nonEmpty)
